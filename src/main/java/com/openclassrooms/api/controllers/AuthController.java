@@ -27,9 +27,9 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
-        UserDTO user = userService.getCurrentUser(authentication.getName());
-        return ResponseEntity.ok(user);
-    }
+    // @GetMapping("/me")
+    // public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+    //     UserDTO user = userService.getCurrentUser(authentication.getName());
+    //     return ResponseEntity.ok(user);
+    // }
 }
