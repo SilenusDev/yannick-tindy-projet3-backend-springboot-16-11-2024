@@ -34,6 +34,7 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/login").permitAll();  // Permet l'accès à /login sans authentification
+					auth.requestMatchers("/error").permitAll(); // Permet l'accès aux pages d'erreur
                     auth.anyRequest().authenticated();           // Requiert une authentification pour tout le reste
                 })
                 .httpBasic(Customizer.withDefaults())
