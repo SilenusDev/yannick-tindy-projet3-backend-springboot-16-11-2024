@@ -4,11 +4,13 @@ public class UserDTO {
     private Long id;
     private String email;
     private String name;
+    private String role;
 
-    public UserDTO(Long id, String email, String name) {
+    public UserDTO(Long id, String email, String name, String role) {
         this.id = id;
         this.email = email;
         this.name = name;
+        this.role = role;
     }
 
     // Getters et Setters
@@ -34,5 +36,12 @@ public class UserDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getRole() { // Getter pour role
+        return role;
+    }
+
+    public void setRole(String role) { // Setter pour role
+        this.role = role;
     }
 }

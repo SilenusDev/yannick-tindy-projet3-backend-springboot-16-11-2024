@@ -35,7 +35,8 @@ public class AuthController {
             String token = userService.register(
                 request.getName(),
                 request.getEmail(),
-                request.getPassword()
+                request.getPassword(),
+                request.getRole() 
             );
             
             // Si succès, retourner le token

@@ -18,6 +18,7 @@ public class User {
     private String email;
     private String name;
     private String password;
+    private String role;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
@@ -56,6 +57,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() { // Getter pour role
+        return role;
+    }
+
+    public void setRole(String role) { // Setter pour role
+        this.role = role;
     }
 
     public LocalDateTime getCreated_at() {

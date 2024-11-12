@@ -28,7 +28,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public String register(String name, String email, String password) {
+    public String register(String name, String email, String password, String role) {
         // Vérifier si l'email existe déjà
         if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("Email déjà utilisé");
@@ -39,6 +39,7 @@ public class UserService {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role);
         user.setCreated_at(LocalDateTime.now());
         user.setUpdated_at(LocalDateTime.now());
 
@@ -89,7 +90,8 @@ public class UserService {
     }
 
     public UserDTO getCurrentUser(String email) {
-        return new UserDTO(null, email, email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return new UserDTO(user.getId(), user.getEmail(), user.getName(), user.getRole());
     }
 
 
