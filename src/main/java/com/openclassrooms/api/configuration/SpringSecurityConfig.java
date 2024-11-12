@@ -20,11 +20,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.openclassrooms.api.repositories.UserRepository;
 
 @Configuration
 public class SpringSecurityConfig {
 	
 	private String jwtKey = "maSuperCleSecretePourMonJWTQuiDoitEtreTresLonguePourLaSecurite123456789";
+	private final UserRepository userRepository;
+
+    // Constructor injection pour UserRepository
+    public SpringSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {       
@@ -51,13 +58,27 @@ public class SpringSecurityConfig {
 		SecretKeySpec secretKey = new SecretKeySpec(this.jwtKey.getBytes(), "HmacSHA256"); // Correct algorithme pour HS256
 		return NimbusJwtDecoder.withSecretKey(secretKey).macAlgorithm(MacAlgorithm.HS256).build();
 	}
-	
+
 	@Bean
-	public UserDetailsService users() {
-		UserDetails user = User.builder().username("user").password(passwordEncoder().encode("password")).roles("USER")
-				.build();		
-		return new InMemoryUserDetailsManager(user);
+	public UserDetailsService userDetailsService() {
+		return email -> userRepository.findByEmail(email)
+			.map(user -> User.builder()
+				.username(user.getEmail())
+				.password(user.getPassword()) // Le mot de passe est déjà crypté en base
+				.roles("USER")
+				.build())
+			.orElseThrow(() -> new RuntimeException("User not found"));
 	}
+
+	
+	// @Bean
+	// public UserDetailsService users() {
+	// 	UserDetails user = User.builder().username("user").password(passwordEncoder().encode("password")).roles("USER")
+	// 			.build();		
+	// 	return new InMemoryUserDetailsManager(user);
+	// }
+
+
 
 
 	@Bean

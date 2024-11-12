@@ -1,6 +1,7 @@
 -- Déchargement des données de la table `users`
-INSERT INTO `users` (`id`, `email`, `name`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'user@user.com', 'user', 'user1234', '2024-10-29 12:24:09', '2024-10-29 12:24:09');
+INSERT INTO `users` (`id`, `email`, `name`, `password`, `role`,`created_at`, `updated_at`) VALUES
+-- (1, 'user@user.com', 'user', 'user1234', '2024-10-29 12:24:09', '2024-10-29 12:24:09');
+(1, 'user2@user.com', 'user2', '$2a$10$42JxNsFCSy1hDMxHNtIQ/.25PKqIqdSFI80lSYsVCRYXA1YeYnxcu', 'USER', '2024-10-29 12:24:09', '2024-10-29 12:24:09');
 
 -- Déchargement des données de la table `rentals`
 INSERT INTO `rentals` (`id`, `name`, `surface`, `price`, `picture`, `description`, `owner_id`, `created_at`, `updated_at`) VALUES

@@ -61,6 +61,25 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    // public String authenticate(String email, String password) {
+    //     // Recherche de l'utilisateur dans la base de données
+    //     User user = userRepository.findByEmail(email)
+    //             .orElseThrow(() -> new RuntimeException("User not found"));
+
+    //     // Vérification du mot de passe
+    //     if (!passwordEncoder.matches(password, user.getPassword())) {
+    //         throw new RuntimeException("Invalid credentials");
+    //     }
+
+    //     // Authentification
+    //     Authentication authentication = authenticationManager.authenticate(
+    //         new UsernamePasswordAuthenticationToken(email, password)
+    //     );
+
+    //     // Génération du JWT
+    //     return jwtService.generateToken(authentication);
+    // }
+
     public String authenticate(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, password)
