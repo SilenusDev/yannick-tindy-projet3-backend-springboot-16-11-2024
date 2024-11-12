@@ -2,6 +2,9 @@ package com.openclassrooms.api.services;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.HashMap;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -31,4 +34,21 @@ public class JWTService {
 		JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
 		return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
 	}
+
+    public String generateSimpleToken(String email) {
+        // Générer un token avec juste l'email comme subject
+        Instant now = Instant.now();
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+            .issuer("self")
+            .issuedAt(now)
+            .expiresAt(now.plus(1, ChronoUnit.DAYS))
+            .subject(email)
+            .build();
+        
+        JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(
+            JwsHeader.with(MacAlgorithm.HS256).build(), 
+            claims
+        );
+        return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
+    }
 }

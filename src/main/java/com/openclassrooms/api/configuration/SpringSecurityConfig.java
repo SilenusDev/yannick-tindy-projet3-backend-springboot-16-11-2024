@@ -21,7 +21,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
-
 @Configuration
 public class SpringSecurityConfig {
 	
@@ -32,11 +31,12 @@ public class SpringSecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login").permitAll();  // Permet l'accès à /login sans authentification
-					auth.requestMatchers("/error").permitAll(); // Permet l'accès aux pages d'erreur
-                    auth.anyRequest().authenticated();           // Requiert une authentification pour tout le reste
-                })
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Autorise toutes les requêtes sans authentification
+				// .authorizeHttpRequests(auth -> {
+                //     auth.requestMatchers("/login").permitAll();  // Permet l'accès à /login sans authentification
+				// 	auth.requestMatchers("/error").permitAll(); // Permet l'accès aux pages d'erreur
+                //     auth.anyRequest().authenticated();           // Requiert une authentification pour tout le reste
+                // })
                 .httpBasic(Customizer.withDefaults())
                 .build();       
     }

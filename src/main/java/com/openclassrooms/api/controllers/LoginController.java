@@ -16,7 +16,7 @@ public class LoginController {
 		this.jwtService = jwtService;
 	}
 	
-	@PostMapping("/login")
+	@PostMapping("/token")
 	public String getToken(Authentication authentication) {
         		String token = jwtService.generateToken(authentication);
         		return token;
