@@ -45,7 +45,9 @@ public class SpringSecurityConfig {
                             "/auth/login",
 							"/rentals",
                             "/rentals/**",
-                            "/user/**"
+                            "/user/**",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**"
                     ).permitAll();
 
                     // Routes nécessitant un token
@@ -54,51 +56,6 @@ public class SpringSecurityConfig {
                 .httpBasic(Customizer.withDefaults()) // Permet d'utiliser le Basic Auth pour le debug si besoin
                 .build();
     }
-
-    // @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    //     return http
-    //             .csrf(csrf -> csrf.disable())
-    //             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    //             .authorizeHttpRequests(auth -> {
-    //                 // Routes accessibles sans token
-    //                 auth.requestMatchers(
-    //                         "/auth/register",
-    //                         "/auth/login",
-    //                         "/rentals",
-    //                         "/rentals/",
-    //                         "/user/"
-    //                 ).permitAll();
-
-    //                 // Routes nécessitant un token
-    //                 auth.requestMatchers(
-    //                         "/auth/me",
-    //                         "/messages",
-    //                         "/rentals",
-    //                         "/rentals/**"
-    //                 ).authenticated();
-
-    //                 // Toute autre route est refusée par défaut
-    //                 auth.anyRequest().denyAll();
-    //             })
-    //             .httpBasic(Customizer.withDefaults()) // Permet d'utiliser le Basic Auth pour le debug si besoin
-    //             .build();
-    // }	
-
-    // @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {       
-    //     return http
-    //             .csrf(csrf -> csrf.disable())
-    //             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    //             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Autorise toutes les requêtes sans authentification
-	// 			// .authorizeHttpRequests(auth -> {
-    //             //     auth.requestMatchers("/login").permitAll();  // Permet l'accès à /login sans authentification
-	// 			// 	auth.requestMatchers("/error").permitAll(); // Permet l'accès aux pages d'erreur
-    //             //     auth.anyRequest().authenticated();           // Requiert une authentification pour tout le reste
-    //             // })
-    //             .httpBasic(Customizer.withDefaults())
-    //             .build();       
-    // }
 
 	@Bean
 	public JwtEncoder jwtEncoder() {
@@ -129,9 +86,6 @@ public class SpringSecurityConfig {
 	// 			.build();		
 	// 	return new InMemoryUserDetailsManager(user);
 	// }
-
-
-
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
