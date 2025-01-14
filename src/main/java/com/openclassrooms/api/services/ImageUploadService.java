@@ -22,11 +22,11 @@ public class ImageUploadService {
         String originalFilename = file.getOriginalFilename();
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
-
+        String imagePath = "file:///C:/Users/yanni/Desktop/projet%203/api/src/upload/" + uniqueFilename;
         Path filePath = Paths.get(UPLOAD_DIR + uniqueFilename);
         Files.createDirectories(filePath.getParent());
         Files.write(filePath, file.getBytes());
 
-        return uniqueFilename;
+        return imagePath;
     }
 }

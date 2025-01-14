@@ -5,7 +5,10 @@ import com.openclassrooms.api.dto.RentalDTO;
 import com.openclassrooms.api.repositories.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,14 +17,17 @@ import java.util.stream.Collectors;
 @Service
 public class RentalService {
 
-    @Autowired
-    private RentalRepository rentalRepository;
+    private final RentalRepository rentalRepository;
+    private final ImageUploadService imageUploadService;
+
+    public RentalService(RentalRepository rentalRepository, ImageUploadService imageUploadService) {
+        this.rentalRepository = rentalRepository;
+        this.imageUploadService = imageUploadService;
+    }
 
     public List<RentalDTO> getAllRentals() {
         List<Rental> rentals = rentalRepository.findAll();
-        return rentals.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return rentals.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     public Optional<RentalDTO> getRentalById(Long id) {
@@ -29,28 +35,37 @@ public class RentalService {
         return rental.map(this::convertToDTO);
     }
 
-    public RentalDTO createRental(RentalDTO rentalDTO) {
+    public RentalDTO createRental(RentalDTO rentalDTO) throws IOException {
+        MultipartFile imageFile = rentalDTO.getImageFile();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imagePath = imageUploadService.uploadImage(imageFile);
+            rentalDTO.setPicture(imagePath);
+        }
+
         Rental rental = convertToEntity(rentalDTO);
-        rental.setCreatedAt(LocalDateTime.now());
-        rental.setUpdatedAt(LocalDateTime.now());
         Rental savedRental = rentalRepository.save(rental);
         return convertToDTO(savedRental);
     }
 
     public RentalDTO updateRental(Long id, RentalDTO rentalDetails) {
-        Rental existingRental = rentalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rental not found"));
+        Optional<Rental> optionalRental = rentalRepository.findById(id);
+        if (optionalRental.isPresent()) {
+            Rental rental = optionalRental.get();
+            rental.setName(rentalDetails.getName());
+            rental.setSurface(rentalDetails.getSurface());
+            rental.setPrice(rentalDetails.getPrice());
+            rental.setPicture(rentalDetails.getPicture());
+            rental.setDescription(rentalDetails.getDescription());
+            rental.setOwnerId(rentalDetails.getOwnerId());
+            LocalDateTime dateOnly = LocalDate.now().atStartOfDay();
+            rental.setCreatedAt(dateOnly);
+            rental.setUpdatedAt(dateOnly);
 
-        existingRental.setName(rentalDetails.getName());
-        existingRental.setSurface(rentalDetails.getSurface());
-        existingRental.setPrice(rentalDetails.getPrice());
-        existingRental.setPicture(rentalDetails.getPicture());
-        existingRental.setDescription(rentalDetails.getDescription());
-        existingRental.setOwnerId(rentalDetails.getOwnerId());
-        existingRental.setUpdatedAt(LocalDateTime.now());
-
-        Rental updatedRental = rentalRepository.save(existingRental);
-        return convertToDTO(updatedRental);
+            Rental updatedRental = rentalRepository.save(rental);
+            return convertToDTO(updatedRental);
+        } else {
+            throw new IllegalArgumentException("Rental with ID " + id + " not found.");
+        }
     }
 
     private RentalDTO convertToDTO(Rental rental) {
@@ -62,8 +77,6 @@ public class RentalService {
         rentalDTO.setPicture(rental.getPicture());
         rentalDTO.setDescription(rental.getDescription());
         rentalDTO.setOwnerId(rental.getOwnerId());
-        rentalDTO.setCreatedAt(rental.getCreatedAt());
-        rentalDTO.setUpdatedAt(rental.getUpdatedAt());
         return rentalDTO;
     }
 
@@ -77,4 +90,5 @@ public class RentalService {
         rental.setOwnerId(rentalDTO.getOwnerId());
         return rental;
     }
+
 }

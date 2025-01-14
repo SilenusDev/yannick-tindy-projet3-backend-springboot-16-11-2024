@@ -7,9 +7,15 @@ import org.springframework.web.bind.annotation.*;
 
 import com.openclassrooms.api.dto.RegisterRequest;
 import com.openclassrooms.api.dto.UserDTO;
+import com.openclassrooms.api.models.ErrorResponse;
 import com.openclassrooms.api.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.Map;
 
@@ -22,10 +28,26 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @ApiResponse(responseCode = "200", description = "You're registered")
-    @ApiResponse(responseCode = "500", description = "register error")
+    @Operation(summary = "Register a new user", description = "Registers a new user and returns a JWT token")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User registered successfully",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
+    })
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = RegisterRequest.class),
+            examples = @ExampleObject(
+                name = "Register Example",
+                value = "{\"name\": \"test\", \"email\": \"test@user.com\", \"password\": \"user1234\"}"
+            )
+        )
+    ) RegisterRequest request) {
         try {
             // Vérification si l'email existe déjà
             if (userService.emailExists(request.getEmail())) {
@@ -53,10 +75,26 @@ public class AuthController {
         }
     }
 
-    @ApiResponse(responseCode = "200", description = "You're logged in")
-    @ApiResponse(responseCode = "500", description = "Loging error")
+    @Operation(summary = "Login a user", description = "Authenticates a user and returns a JWT token")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User logged in successfully",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
+    })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<?> login(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = Map.class),
+            examples = @ExampleObject(
+                name = "Login Example",
+                value = "{\"email\": \"test@user.com\", \"password\": \"user1234\"}"
+            )
+        )
+    ) Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
     
@@ -69,8 +107,15 @@ public class AuthController {
         }
     }
 
-    @ApiResponse(responseCode = "200", description = "Welcome")
-    @ApiResponse(responseCode = "500", description = "Owner error")
+    @Operation(summary = "Get current user", description = "Returns the current authenticated user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User details retrieved successfully",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+        @ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),    
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
         UserDTO user = userService.getCurrentUser(authentication.getName());

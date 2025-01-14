@@ -3,6 +3,11 @@ package com.openclassrooms.api.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+// import java.time.LocalDateTime;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class RentalDTO {
     private Long id;
     private String name;
@@ -11,6 +16,7 @@ public class RentalDTO {
     private String picture;
     private String description;
     private Long ownerId;
+    private MultipartFile imageFile;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -71,6 +77,14 @@ public class RentalDTO {
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
+    }
+
+        public MultipartFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
     }
 
     public LocalDateTime getCreatedAt() {

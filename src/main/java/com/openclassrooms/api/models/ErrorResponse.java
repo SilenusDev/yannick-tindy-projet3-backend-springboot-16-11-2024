@@ -2,14 +2,12 @@ package com.openclassrooms.api.models;
 
 public class ErrorResponse {
     private String message;
-    private int status;
+    private int code;
 
-    public ErrorResponse(String message, int status) {
+    public ErrorResponse(String message, int code) {
         this.message = message;
-        this.status = status;
+        this.code = code;
     }
-
-    // Getters et setters
 
     public String getMessage() {
         return message;
@@ -19,11 +17,12 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public int getStatus() {
-        return status;
+    public int getCode() {
+        return code;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setCode(int code) {
+        this.code = code;
     }
 }
+

@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.api.dto.UserDTO;
 import com.openclassrooms.api.models.User;
 import com.openclassrooms.api.repositories.UserRepository;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,8 +44,10 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("USER");
-        user.setCreated_at(LocalDateTime.now());
-        user.setUpdated_at(LocalDateTime.now());
+        LocalDateTime dateOnly = LocalDate.now().atStartOfDay();
+        user.setCreated_at(dateOnly);
+        user.setUpdated_at(dateOnly);
+
 
         // Sauvegarder l'utilisateur
         userRepository.save(user);
@@ -89,6 +94,10 @@ public class UserService {
     //         throw new RuntimeException("Invalid credentials");
     //     }
     // }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
 
     public UserDTO getCurrentUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
