@@ -28,8 +28,9 @@ import com.openclassrooms.api.repositories.UserRepository;
 @Configuration
 // @EnableWebSecurity
 // @EnableMethodSecurity 
+
 public class SpringSecurityConfig {
-	// @Value("${jwt.secret}")
+	@Value("${jwt.secret}")
     private String jwtKey = "maSuperCleSecretePourMonJWTQuiDoitEtreTresLonguePourLaSecurite123456789";
     private final UserRepository userRepository;
 
@@ -48,7 +49,6 @@ public class SpringSecurityConfig {
                 .requestMatchers(
                     "/api/auth/register",
                     "/api/auth/login",
-					"/token",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()
