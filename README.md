@@ -13,6 +13,9 @@ execute data.sql
 Clone the project with :
 git clone https://github.com/SilenusDev/yannick-tindy-projet3-backend-springboot-16-11-2024.git
 
+stand on the final branch:
+git checkout final
+
 run the project with :
 ./mvnw spring-boot:run
 
