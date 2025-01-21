@@ -1,17 +1,16 @@
 package com.openclassrooms.api.dto;
 
-public class MessageResponse {
+public class MessageResponseDTO {
     private String message;
 
-    public MessageResponse(String message) {
+    // Constructeur
+    public MessageResponseDTO(String message) {
         this.message = message;
     }
 
+    // Getter
     public String getMessage() {
         return message;
     }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }
+

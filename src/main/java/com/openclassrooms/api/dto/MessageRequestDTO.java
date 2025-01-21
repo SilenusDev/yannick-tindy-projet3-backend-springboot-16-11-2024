@@ -1,17 +1,11 @@
 package com.openclassrooms.api.dto;
 
-public class MessageDTO {
+public class MessageRequestDTO {
     private Long rentalId;
     private Long userId;
     private String message;
 
-    public MessageDTO(Long rentalId, Long userId, String message) {
-        this.rentalId = rentalId;
-        this.userId = userId;
-        this.message = message;
-    }
-
-
+    // Getters et Setters
     public Long getRentalId() {
         return rentalId;
     }
@@ -35,5 +29,4 @@ public class MessageDTO {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }
