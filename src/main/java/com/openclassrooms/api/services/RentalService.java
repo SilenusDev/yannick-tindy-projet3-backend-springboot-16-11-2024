@@ -1,14 +1,12 @@
 package com.openclassrooms.api.services;
 
-import com.openclassrooms.api.models.Rental;
 import com.openclassrooms.api.dto.RentalDTO;
+import com.openclassrooms.api.models.Rental;
 import com.openclassrooms.api.repositories.RentalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -38,14 +36,28 @@ public class RentalService {
     public RentalDTO createRental(RentalDTO rentalDTO) throws IOException {
         MultipartFile imageFile = rentalDTO.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            String imagePath = imageUploadService.uploadImage(imageFile);
-            rentalDTO.setPicture(imagePath);
+            String filename = imageUploadService.uploadImage(imageFile);
+            // Créer l'URL relative que le front utilisera
+            String imageUrl = "/api/images/" + filename;
+            rentalDTO.setPicture(imageUrl);  // Cette URL sera utilisée directement par le front
         }
-
+    
         Rental rental = convertToEntity(rentalDTO);
         Rental savedRental = rentalRepository.save(rental);
         return convertToDTO(savedRental);
     }
+
+    // public RentalDTO createRental(RentalDTO rentalDTO) throws IOException {
+    //     MultipartFile imageFile = rentalDTO.getImageFile();
+    //     if (imageFile != null && !imageFile.isEmpty()) {
+    //         String imagePath = imageUploadService.uploadImage(imageFile);
+    //         rentalDTO.setPicture(imagePath);
+    //     }
+
+    //     Rental rental = convertToEntity(rentalDTO);
+    //     Rental savedRental = rentalRepository.save(rental);
+    //     return convertToDTO(savedRental);
+    // }
 
     public RentalDTO updateRental(Long id, RentalDTO rentalDetails) {
         Optional<Rental> optionalRental = rentalRepository.findById(id);
@@ -57,9 +69,7 @@ public class RentalService {
             rental.setPicture(rentalDetails.getPicture());
             rental.setDescription(rentalDetails.getDescription());
             rental.setOwnerId(rentalDetails.getOwnerId());
-            LocalDateTime dateOnly = LocalDate.now().atStartOfDay();
-            rental.setCreatedAt(dateOnly);
-            rental.setUpdatedAt(dateOnly);
+            rental.setUpdatedAt(LocalDateTime.now());
 
             Rental updatedRental = rentalRepository.save(rental);
             return convertToDTO(updatedRental);
@@ -77,6 +87,8 @@ public class RentalService {
         rentalDTO.setPicture(rental.getPicture());
         rentalDTO.setDescription(rental.getDescription());
         rentalDTO.setOwnerId(rental.getOwnerId());
+        rentalDTO.setCreatedAt(rental.getCreatedAt());
+        rentalDTO.setUpdatedAt(rental.getUpdatedAt());
         return rentalDTO;
     }
 
@@ -88,7 +100,9 @@ public class RentalService {
         rental.setPicture(rentalDTO.getPicture());
         rental.setDescription(rentalDTO.getDescription());
         rental.setOwnerId(rentalDTO.getOwnerId());
+        rental.setCreatedAt(LocalDateTime.now());
+        rental.setUpdatedAt(LocalDateTime.now());
         return rental;
     }
-
 }
+

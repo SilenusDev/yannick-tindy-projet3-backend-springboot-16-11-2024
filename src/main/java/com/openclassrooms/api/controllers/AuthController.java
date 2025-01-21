@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.openclassrooms.api.dto.LoginRequestDTO;
 import com.openclassrooms.api.dto.RegisterRequest;
 import com.openclassrooms.api.dto.RegisterResponseDTO;
 import com.openclassrooms.api.dto.UserDTO;
@@ -80,19 +81,19 @@ public class AuthController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(
+    public ResponseEntity<?> login(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(
         content = @Content(
             mediaType = "application/json",
-            schema = @Schema(implementation = Map.class),
+            schema = @Schema(implementation = LoginRequestDTO.class),
             examples = @ExampleObject(
                 name = "Login Example",
                 value = "{\"email\": \"test@user.com\", \"password\": \"user1234\"}"
             )
         )
-    ) Map<String, String> credentials) {
-        String email = credentials.get("email");
-        String password = credentials.get("password");
-    
+    ) LoginRequestDTO credentials) {
+        String email = credentials.getEmail();
+        String password = credentials.getPassword();
+
         try {
             String token = userService.authenticate(email, password);
             return ResponseEntity.ok(java.util.Collections.singletonMap("token", token));

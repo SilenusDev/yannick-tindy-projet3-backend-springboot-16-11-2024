@@ -34,8 +34,6 @@ public class RentalController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Rentals retrieved successfully",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalDTO.class))),
-        @ApiResponse(responseCode = "401", description = "Unauthorized",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "No rentals found",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
@@ -48,15 +46,13 @@ public class RentalController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse("No rentals found.", HttpStatus.NOT_FOUND.value()));
         }
-        return ResponseEntity.ok(rentals);
+        return ResponseEntity.ok(Map.of("rentals", rentals));
     }
 
     @Operation(summary = "Get rental by ID", description = "Retrieves a rental by its ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Rental retrieved successfully",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalDTO.class))),
-        @ApiResponse(responseCode = "401", description = "Unauthorized",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Rental not found",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
@@ -80,18 +76,16 @@ public class RentalController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalDTO.class))),
         @ApiResponse(responseCode = "400", description = "Invalid input",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "401", description = "Unauthorized",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
     })
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<?> createRental(@RequestParam("name") String name,
-                                        @RequestParam("surface") BigDecimal surface,
-                                        @RequestParam("price") BigDecimal price,
-                                        @RequestParam("description") String description,
-                                        @RequestParam("ownerId") Long ownerId,
-                                        @RequestPart("imageFile") MultipartFile imageFile) {
+                                          @RequestParam("surface") BigDecimal surface,
+                                          @RequestParam("price") BigDecimal price,
+                                          @RequestParam("description") String description,
+                                          @RequestParam("ownerId") Long ownerId,
+                                          @RequestPart("imageFile") MultipartFile imageFile) {
         try {
             RentalDTO rentalDTO = new RentalDTO();
             rentalDTO.setName(name);
@@ -122,8 +116,6 @@ public class RentalController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = RentalDTO.class))),
         @ApiResponse(responseCode = "400", description = "Invalid input",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "401", description = "Unauthorized",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
     })
@@ -148,3 +140,4 @@ public class RentalController {
         }
     }
 }
+
