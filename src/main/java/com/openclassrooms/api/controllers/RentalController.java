@@ -1,7 +1,6 @@
 package com.openclassrooms.api.controllers;
 
 import com.openclassrooms.api.models.ErrorResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.api.dto.RentalDTO;
 import com.openclassrooms.api.services.RentalService;
 

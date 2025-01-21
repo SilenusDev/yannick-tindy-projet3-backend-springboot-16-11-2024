@@ -26,12 +26,10 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.openclassrooms.api.repositories.UserRepository;
 
 @Configuration
-// @EnableWebSecurity
-// @EnableMethodSecurity 
-
 public class SpringSecurityConfig {
 	@Value("${jwt.secret}")
-    private String jwtKey = "maSuperCleSecretePourMonJWTQuiDoitEtreTresLonguePourLaSecurite123456789";
+    private String jwtKey ;
+
     private final UserRepository userRepository;
 
     public SpringSecurityConfig(UserRepository userRepository) {

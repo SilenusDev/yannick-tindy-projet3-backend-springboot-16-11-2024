@@ -27,7 +27,7 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final UserService userService;
-    // Constructeur pour injecter UserRepository
+    
     public UserController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;

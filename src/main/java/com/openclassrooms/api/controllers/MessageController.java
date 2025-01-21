@@ -67,7 +67,6 @@ public class MessageController {
             )
         )
     ) MessageDTO messageDTO) {
-        // Validation des champs requis
         if (messageDTO.getRentalId() == null || messageDTO.getUserId() == null || 
             messageDTO.getMessage() == null || messageDTO.getMessage().trim().isEmpty()) {
             return ResponseEntity
@@ -77,7 +76,6 @@ public class MessageController {
         }
 
         try {
-            // Convertir DTO en entité
             Message message = new Message();
             message.setRentalId(messageDTO.getRentalId());
             message.setUserId(messageDTO.getUserId());

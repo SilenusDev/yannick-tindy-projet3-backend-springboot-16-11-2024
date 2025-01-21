@@ -20,8 +20,6 @@ public class RentalDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Getters et setters
-    // ...
 
     public Long getId() {
         return id;

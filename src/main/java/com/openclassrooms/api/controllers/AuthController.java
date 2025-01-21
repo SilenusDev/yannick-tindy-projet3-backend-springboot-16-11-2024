@@ -49,27 +49,20 @@ public class AuthController {
         )
     ) RegisterRequest request) {
         try {
-            // Vérification si l'email existe déjà
             if (userService.emailExists(request.getEmail())) {
                 return ResponseEntity.badRequest()
                     .body("Cet email est déjà utilisé");
             }
-            
-            // Tentative d'enregistrement
+
             String token = userService.register(
                 request.getName(),
                 request.getEmail(),
                 request.getPassword()
             );
-            
-            // Retourner directement le token
             return ResponseEntity.ok(token);
             
         } catch (Exception e) {
-            // Log l'erreur pour le débogage
             System.out.println("Erreur lors de l'enregistrement: " + e.getMessage());
-            
-            // Retourner un message d'erreur plus spécifique
             return ResponseEntity.badRequest()
                 .body("Erreur lors de l'enregistrement: " + e.getMessage());
         }

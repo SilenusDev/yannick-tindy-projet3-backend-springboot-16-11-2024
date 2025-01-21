@@ -1,4 +1,3 @@
-// MessageService.java
 package com.openclassrooms.api.services;
 
 import com.openclassrooms.api.models.Message;

@@ -11,7 +11,7 @@ public class MessageDTO {
         this.message = message;
     }
 
-    // Getters et Setters
+
     public Long getRentalId() {
         return rentalId;
     }
