@@ -41,23 +41,11 @@ public class RentalService {
             String imageUrl = "/api/images/" + filename;
             rentalDTO.setPicture(imageUrl);  // Cette URL sera utilisée directement par le front
         }
-    
+
         Rental rental = convertToEntity(rentalDTO);
         Rental savedRental = rentalRepository.save(rental);
         return convertToDTO(savedRental);
     }
-
-    // public RentalDTO createRental(RentalDTO rentalDTO) throws IOException {
-    //     MultipartFile imageFile = rentalDTO.getImageFile();
-    //     if (imageFile != null && !imageFile.isEmpty()) {
-    //         String imagePath = imageUploadService.uploadImage(imageFile);
-    //         rentalDTO.setPicture(imagePath);
-    //     }
-
-    //     Rental rental = convertToEntity(rentalDTO);
-    //     Rental savedRental = rentalRepository.save(rental);
-    //     return convertToDTO(savedRental);
-    // }
 
     public RentalDTO updateRental(Long id, RentalDTO rentalDetails) {
         Optional<Rental> optionalRental = rentalRepository.findById(id);
@@ -68,8 +56,8 @@ public class RentalService {
             rental.setPrice(rentalDetails.getPrice());
             rental.setPicture(rentalDetails.getPicture());
             rental.setDescription(rentalDetails.getDescription());
-            rental.setOwnerId(rentalDetails.getOwnerId());
-            rental.setUpdatedAt(LocalDateTime.now());
+            rental.setOwner_id(rentalDetails.getOwner_id());
+            rental.setUpdated_at(LocalDateTime.now());
 
             Rental updatedRental = rentalRepository.save(rental);
             return convertToDTO(updatedRental);
@@ -86,9 +74,9 @@ public class RentalService {
         rentalDTO.setPrice(rental.getPrice());
         rentalDTO.setPicture(rental.getPicture());
         rentalDTO.setDescription(rental.getDescription());
-        rentalDTO.setOwnerId(rental.getOwnerId());
-        rentalDTO.setCreatedAt(rental.getCreatedAt());
-        rentalDTO.setUpdatedAt(rental.getUpdatedAt());
+        rentalDTO.setOwner_id(rental.getOwner_id());
+        rentalDTO.setCreated_at(rental.getCreated_at());
+        rentalDTO.setUpdated_at(rental.getUpdated_at());
         return rentalDTO;
     }
 
@@ -99,10 +87,9 @@ public class RentalService {
         rental.setPrice(rentalDTO.getPrice());
         rental.setPicture(rentalDTO.getPicture());
         rental.setDescription(rentalDTO.getDescription());
-        rental.setOwnerId(rentalDTO.getOwnerId());
-        rental.setCreatedAt(LocalDateTime.now());
-        rental.setUpdatedAt(LocalDateTime.now());
+        rental.setOwner_id(rentalDTO.getOwner_id());
+        rental.setCreated_at(LocalDateTime.now());
+        rental.setUpdated_at(LocalDateTime.now());
         return rental;
     }
 }
-

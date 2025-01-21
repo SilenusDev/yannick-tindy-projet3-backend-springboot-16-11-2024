@@ -92,7 +92,7 @@ public class RentalController {
             rentalDTO.setSurface(surface);
             rentalDTO.setPrice(price);
             rentalDTO.setDescription(description);
-            rentalDTO.setOwnerId(ownerId);
+            rentalDTO.setOwner_id(ownerId);
             rentalDTO.setImageFile(imageFile);
 
             RentalDTO savedRental = rentalService.createRental(rentalDTO);

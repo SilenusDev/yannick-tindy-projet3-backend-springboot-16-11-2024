@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.openclassrooms.api.models.Rental;
+
 public class RentalDTO {
     private Long id;
     private String name;
@@ -12,12 +14,44 @@ public class RentalDTO {
     private BigDecimal price;
     private String picture;
     private String description;
-    private Long ownerId;
-    private MultipartFile imageFile;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Long owner_id;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 
+    // Constructeur sans paramètres
+    public RentalDTO() {
+    }
 
+    // Constructeur avec tous les champs
+    public RentalDTO(Long id, String name, BigDecimal surface, BigDecimal price, String picture, String description, Long owner_id, LocalDateTime created_at, LocalDateTime updated_at) {
+        this.id = id;
+        this.name = name;
+        this.surface = surface;
+        this.price = price;
+        this.picture = picture;
+        this.description = description;
+        this.owner_id = owner_id;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        
+    }
+
+    // Méthode de conversion
+    public static RentalDTO fromEntity(Rental rental) {
+        return new RentalDTO(
+            rental.getId(),
+            rental.getName(),
+            rental.getSurface(),
+            rental.getPrice(),
+            rental.getPicture(),
+            rental.getDescription(),
+            rental.getOwner_id(),
+            rental.getCreated_at(),
+            rental.getUpdated_at()
+        );
+    }
+
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -66,36 +100,29 @@ public class RentalDTO {
         this.description = description;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public Long getOwner_id() {
+        return owner_id;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner_id(Long owner_id) {
+        this.owner_id = owner_id;
     }
 
-        public MultipartFile getImageFile() {
-        return imageFile;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setImageFile(MultipartFile imageFile) {
-        this.imageFile = imageFile;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getUpdated_at() {
+        return updated_at;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setUpdated_at(LocalDateTime updated_at) {
+        this.updated_at = updated_at;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
-
