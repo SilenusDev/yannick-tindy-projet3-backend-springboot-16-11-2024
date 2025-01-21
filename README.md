@@ -16,6 +16,9 @@ git clone https://github.com/SilenusDev/yannick-tindy-projet3-backend-springboot
 stand on the final branch:
 git checkout final
 
+Install project :
+mvn clean install
+
 run the project with :
 ./mvnw spring-boot:run
 
