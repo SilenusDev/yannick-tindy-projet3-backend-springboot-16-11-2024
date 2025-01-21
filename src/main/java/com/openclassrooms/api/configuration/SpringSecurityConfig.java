@@ -69,9 +69,7 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public JwtDecoder jwtDecoder() {
-		// Utilise HmacSHA256 comme algorithme pour SecretKeySpec
 		SecretKeySpec secretKey = new SecretKeySpec(this.jwtKey.getBytes(), "HmacSHA256");
-		// Configure le décodeur JWT avec la clé secrète et l'algorithme HS256
 		return NimbusJwtDecoder.withSecretKey(secretKey)
 			.macAlgorithm(MacAlgorithm.HS256)
 			.build();

@@ -32,6 +32,10 @@ public class JWTService {
 		return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
 	}
 
+
+
+
+    
     public String generateSimpleToken(String email) {
         
         Instant now = Instant.now();

@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.openclassrooms.api.dto.RegisterRequest;
+import com.openclassrooms.api.dto.RegisterResponseDTO;
 import com.openclassrooms.api.dto.UserDTO;
 import com.openclassrooms.api.models.ErrorResponse;
 import com.openclassrooms.api.services.UserService;
@@ -59,7 +60,8 @@ public class AuthController {
                 request.getEmail(),
                 request.getPassword()
             );
-            return ResponseEntity.ok(token);
+            RegisterResponseDTO registerResponseDTO = new RegisterResponseDTO(token);
+            return ResponseEntity.ok(registerResponseDTO);
             
         } catch (Exception e) {
             System.out.println("Erreur lors de l'enregistrement: " + e.getMessage());
