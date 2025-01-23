@@ -15,7 +15,7 @@ public class RentalDTO {
     private Long owner_id;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
-    private MultipartFile imageFile; // Ajoutez cette ligne
+    // private MultipartFile imageFile; // Ajoutez cette ligne
 
     // Getters and Setters
     public Long getId() {
@@ -38,17 +38,23 @@ public class RentalDTO {
         return surface;
     }
 
-    public void setSurface(BigDecimal surface) {
-        this.surface = surface;
+    public void setSurface(Double surface) {
+        this.surface = surface != null ? BigDecimal.valueOf(surface) : null;
     }
+    // public void setSurface(BigDecimal surface) {
+    //     this.surface = surface;
+    // }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setPrice(Double price) {
+        this.price = price != null ? BigDecimal.valueOf(price) : null;
     }
+    // public void setPrice(BigDecimal price) {
+    //     this.price = price;
+    // }
 
     public String getPicture() {
         return picture;
@@ -90,11 +96,11 @@ public class RentalDTO {
         this.updated_at = updated_at;
     }
 
-    public MultipartFile getImageFile() {
-        return imageFile;
-    }
+    // public MultipartFile getImageFile() {
+    //     return imageFile;
+    // }
 
-    public void setImageFile(MultipartFile imageFile) {
-        this.imageFile = imageFile;
-    }
+    // public void setImageFile(MultipartFile imageFile) {
+    //     this.imageFile = imageFile;
+    // }
 }

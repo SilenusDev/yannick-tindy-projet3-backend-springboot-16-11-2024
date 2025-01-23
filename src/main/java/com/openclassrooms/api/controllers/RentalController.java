@@ -3,6 +3,7 @@ package com.openclassrooms.api.controllers;
 import com.openclassrooms.api.models.ErrorResponse;
 import com.openclassrooms.api.dto.RentalDTO;
 import com.openclassrooms.api.services.RentalService;
+import com.openclassrooms.api.services.ImageUploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,8 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,9 +26,12 @@ import java.util.Optional;
 public class RentalController {
 
     private final RentalService rentalService;
+    private final ImageUploadService imageUploadService;
 
-    public RentalController(RentalService rentalService) {
+    // Constructeur avec dépendances
+    public RentalController(RentalService rentalService, ImageUploadService imageUploadService) {
         this.rentalService = rentalService;
+        this.imageUploadService = imageUploadService;
     }
 
     @Operation(summary = "Get all rentals", description = "Retrieves a list of all rentals")
@@ -79,21 +83,26 @@ public class RentalController {
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
     })
-    @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<?> createRental(@RequestParam("name") String name,
-                                          @RequestParam("surface") BigDecimal surface,
-                                          @RequestParam("price") BigDecimal price,
-                                          @RequestParam("description") String description,
-                                          @RequestParam("ownerId") Long ownerId,
-                                          @RequestPart("imageFile") MultipartFile imageFile) {
+    @PostMapping(value = "/api/rentals", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> createRental(
+            @RequestPart("name") String name,
+            @RequestPart("surface") Double surface,
+            @RequestPart("price") Double price,
+            @RequestPart("description") String description,
+            @RequestPart(value = "picture", required = false) MultipartFile picture) {
         try {
+            // Créer un RentalDTO à partir des données reçues
             RentalDTO rentalDTO = new RentalDTO();
             rentalDTO.setName(name);
             rentalDTO.setSurface(surface);
             rentalDTO.setPrice(price);
             rentalDTO.setDescription(description);
-            rentalDTO.setOwner_id(ownerId);
-            rentalDTO.setImageFile(imageFile); // Ajoutez cette ligne
+    
+            // Gérer l'upload de l'image si elle est fournie
+            if (picture != null && !picture.isEmpty()) {
+                String picturePath = imageUploadService.uploadImage(picture); // Appel correct au service d'upload
+                rentalDTO.setPicture(picturePath);
+            }
     
             RentalDTO savedRental = rentalService.createRental(rentalDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -102,6 +111,7 @@ public class RentalController {
                             "rental", savedRental
                     ));
         } catch (Exception e) {
+            e.printStackTrace(); 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(
                             "Error creating rental: " + e.getMessage(),
@@ -109,7 +119,6 @@ public class RentalController {
                     ));
         }
     }
-    
 
     @Operation(summary = "Update a rental", description = "Updates an existing rental by its ID")
     @ApiResponses(value = {
@@ -141,4 +150,3 @@ public class RentalController {
         }
     }
 }
-

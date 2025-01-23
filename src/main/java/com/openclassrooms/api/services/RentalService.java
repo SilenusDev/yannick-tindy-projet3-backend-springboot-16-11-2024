@@ -34,18 +34,31 @@ public class RentalService {
     }
 
     public RentalDTO createRental(RentalDTO rentalDTO) throws IOException {
-        MultipartFile imageFile = rentalDTO.getImageFile();
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String filename = imageUploadService.uploadImage(imageFile);
-            // Créer l'URL relative que le front utilisera
-            String imageUrl = "/api/images/" + filename;
-            rentalDTO.setPicture(imageUrl);  // Cette URL sera utilisée directement par le front
-        }
-    
         Rental rental = convertToEntity(rentalDTO);
         Rental savedRental = rentalRepository.save(rental);
         return convertToDTO(savedRental);
     }
+    
+
+    public void uploadImage(Long rentalId, MultipartFile imageFile) {
+        try {
+            // Sauvegarder l'image et obtenir le nom du fichier unique
+            String imageFilename = imageUploadService.uploadImage(imageFile);
+    
+            // Trouver la location par ID
+            Optional<Rental> optionalRental = rentalRepository.findById(rentalId);
+            if (optionalRental.isPresent()) {
+                Rental rental = optionalRental.get();
+                rental.setPicture(imageFilename); // Mettre à jour le chemin de l'image
+                rentalRepository.save(rental); // Sauvegarder les modifications
+            } else {
+                throw new IllegalArgumentException("Rental not found with ID: " + rentalId);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image: " + e.getMessage(), e);
+        }
+    }
+    
 
     public RentalDTO updateRental(Long id, RentalDTO rentalDetails) {
         Optional<Rental> optionalRental = rentalRepository.findById(id);
@@ -70,8 +83,8 @@ public class RentalService {
         RentalDTO rentalDTO = new RentalDTO();
         rentalDTO.setId(rental.getId());
         rentalDTO.setName(rental.getName());
-        rentalDTO.setSurface(rental.getSurface());
-        rentalDTO.setPrice(rental.getPrice());
+        rentalDTO.setSurface(rental.getSurface() != null ? rental.getSurface().doubleValue() : null);
+        rentalDTO.setPrice(rental.getPrice() != null ? rental.getPrice().doubleValue() : null);
         rentalDTO.setPicture(rental.getPicture());
         rentalDTO.setDescription(rental.getDescription());
         rentalDTO.setOwner_id(rental.getOwner_id());
