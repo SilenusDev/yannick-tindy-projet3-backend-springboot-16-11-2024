@@ -1,11 +1,9 @@
 package com.openclassrooms.api.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 import org.springframework.web.multipart.MultipartFile;
 
-import com.openclassrooms.api.models.Rental;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class RentalDTO {
     private Long id;
@@ -17,41 +15,9 @@ public class RentalDTO {
     private Long owner_id;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private MultipartFile imageFile; // Ajoutez cette ligne
 
-    // Constructeur sans paramètres
-    public RentalDTO() {
-    }
-
-    // Constructeur avec tous les champs
-    public RentalDTO(Long id, String name, BigDecimal surface, BigDecimal price, String picture, String description, Long owner_id, LocalDateTime created_at, LocalDateTime updated_at) {
-        this.id = id;
-        this.name = name;
-        this.surface = surface;
-        this.price = price;
-        this.picture = picture;
-        this.description = description;
-        this.owner_id = owner_id;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        
-    }
-
-    // Méthode de conversion
-    public static RentalDTO fromEntity(Rental rental) {
-        return new RentalDTO(
-            rental.getId(),
-            rental.getName(),
-            rental.getSurface(),
-            rental.getPrice(),
-            rental.getPicture(),
-            rental.getDescription(),
-            rental.getOwner_id(),
-            rental.getCreated_at(),
-            rental.getUpdated_at()
-        );
-    }
-
-    // Getters et Setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -124,5 +90,11 @@ public class RentalDTO {
         this.updated_at = updated_at;
     }
 
+    public MultipartFile getImageFile() {
+        return imageFile;
+    }
 
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
+    }
 }

@@ -93,8 +93,8 @@ public class RentalController {
             rentalDTO.setPrice(price);
             rentalDTO.setDescription(description);
             rentalDTO.setOwner_id(ownerId);
-            rentalDTO.setImageFile(imageFile);
-
+            rentalDTO.setImageFile(imageFile); // Ajoutez cette ligne
+    
             RentalDTO savedRental = rentalService.createRental(rentalDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of(
@@ -109,6 +109,7 @@ public class RentalController {
                     ));
         }
     }
+    
 
     @Operation(summary = "Update a rental", description = "Updates an existing rental by its ID")
     @ApiResponses(value = {

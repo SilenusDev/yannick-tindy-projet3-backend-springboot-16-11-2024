@@ -41,7 +41,7 @@ public class RentalService {
             String imageUrl = "/api/images/" + filename;
             rentalDTO.setPicture(imageUrl);  // Cette URL sera utilisée directement par le front
         }
-
+    
         Rental rental = convertToEntity(rentalDTO);
         Rental savedRental = rentalRepository.save(rental);
         return convertToDTO(savedRental);
